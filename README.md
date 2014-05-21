@@ -5,7 +5,8 @@ OpenEmbedded layer with Bitbake fetch support for Node.js NPM repositories.
 
 Adds support for `npm://<package name>;version=<package version>` in recipe `SRC_URI`.
 
-## Install
+Installation
+============
 
 1. Add `bitbake-npm` layer to `sources/layers.txt`
 
@@ -21,7 +22,10 @@ Adds support for `npm://<package name>;version=<package version>` in recipe `SRC
         "
     ```
 
-## Usage
+3. Run `oebb.sh update`
+
+Usage
+=====
 
 1. Inherit `npm-fetch` class in recipe
 
