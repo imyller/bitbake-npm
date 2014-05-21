@@ -9,6 +9,9 @@
 # See recipes/forever/forever_*.bb for usage example.
 # 
 
+NPM ?= "npm"
+NPM_ARCHFLAGS ?= "--arch=${TARGET_ARCH} --target_arch=${TARGET_ARCH}"
+
 python () {
         import npm
         bb.fetch2.methods.append( npm.NPM() )
