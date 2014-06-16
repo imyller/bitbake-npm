@@ -1,7 +1,7 @@
 bitbake-npm
 ===========
 
-OpenEmbedded layer with Bitbake fetch support for Node.js NPM repositories.
+Angstrom (Yocto 1.5) Bitbake layer adding fetch support for Node.js NPM repositories.
 
 Adds support for `npm://<package name>;version=<package version>` in recipe `SRC_URI`.
 
