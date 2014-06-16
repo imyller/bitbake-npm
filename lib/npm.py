@@ -36,7 +36,7 @@ from   bb.fetch2 import runfetchcmd
 class NPM(FetchMethod):
     """Class to fetch packages via 'npm'"""
 
-    def supports(self, url, ud, d):
+    def supports(self, ud, d):
         """
     	Check to see if a given url can be fetched with npm.
         """
