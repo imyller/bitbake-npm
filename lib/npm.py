@@ -60,10 +60,10 @@ class NPM(FetchMethod):
         ud.installdir = os.path.join(ud.npmdir, ud.pkgdir)
         ud.localfile = ud.installdir
 
-    def localpath(self, url, ud, d):
+    def localpath(self, ud, d):
         return ud.installdir
 
-    def download(self, uri, ud, d):
+    def download(self, ud, d):
         """Fetch packages"""
         fetchcmd = ( d.getVar("NPM", True) or "npm" ) + " "
         fetchcmd += d.getVar("NPM_ARCHFLAGS", True) or ""
@@ -72,7 +72,7 @@ class NPM(FetchMethod):
         if not os.path.exists(ud.installdir):
             bb.utils.mkdirhier(ud.installdir)
         os.chdir(ud.installdir)
-        logger.info("npm install " + uri)
+        logger.info("npm install " + ud.url)
         logger.debug(2, "executing " + fetchcmd)
         bb.fetch2.check_network_access(d, fetchcmd)
         runfetchcmd(fetchcmd, d, quiet=False)
