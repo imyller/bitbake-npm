@@ -72,6 +72,8 @@ class NPM(FetchMethod):
         if not os.path.exists(ud.installdir):
             bb.utils.mkdirhier(ud.installdir)
         os.chdir(ud.installdir)
+        with open("package.json", 'w') as f:
+            f.write("{}\n")
         logger.info("npm install " + ud.url)
         logger.debug(2, "executing " + fetchcmd)
         bb.fetch2.check_network_access(d, fetchcmd)
