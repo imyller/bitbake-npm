@@ -1,9 +1,8 @@
 DESCRIPTION = "A simple CLI tool for ensuring that a given script runs continuously (i.e. forever)."
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=458b58215a8926c060a7dd6cd89c6367"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=da5360871cfc7e3df08cde6a2adeac25"
 
 PR = "r0"
-
 
 # Add support for npm:// source URI
 inherit npm-fetch
