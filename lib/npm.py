@@ -5,7 +5,7 @@ BitBake 'Fetch' implementation for npm
 
 """
 
-# Copyright (C) 2014 Ilkka Myller
+# Copyright (C) 2014-2015 Ilkka Myller
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -26,6 +26,7 @@ import os
 import logging
 import bb
 import urllib
+import subprocess
 from   bb import data
 from   bb.fetch2 import FetchMethod
 from   bb.fetch2 import FetchError
@@ -59,22 +60,26 @@ class NPM(FetchMethod):
         ud.npmdir = d.getVar("NPMDIR", True) or (d.getVar("DL_DIR", True) + os.sep + "npm" + os.sep)
         ud.installdir = os.path.join(ud.npmdir, ud.pkgdir)
         ud.localfile = ud.installdir
+        ud.npmcmd = (d.getVar("NPM", True) or "npm")
 
     def localpath(self, ud, d):
         return ud.installdir
 
     def download(self, ud, d):
         """Fetch packages"""
-        fetchcmd = ( d.getVar("NPM", True) or "npm" ) + " "
+        logger.info("npm install URL: " + ud.url)
+        fetchcmd = ud.npmcmd + " "
         fetchcmd += d.getVar("NPM_ARCHFLAGS", True) or ""
         fetchcmd += " install " + ud.fetchname
         fetchcmd += " --force"
+        bb.fetch2.check_network_access(d, fetchcmd)
         if not os.path.exists(ud.installdir):
             bb.utils.mkdirhier(ud.installdir)
+        logger.debug(2, "npm install dir: " + ud.installdir)
+        logger.debug(2, "npm cmd: " + fetchcmd)
+        npm_version = subprocess.check_output([ud.npmcmd, "-v"], stderr=subprocess.STDOUT).strip()
+        logger.debug(2, "npm version: " + npm_version)
         os.chdir(ud.installdir)
-        logger.info("npm install " + ud.url)
-        logger.debug(2, "executing " + fetchcmd)
-        bb.fetch2.check_network_access(d, fetchcmd)
         runfetchcmd(fetchcmd, d, quiet=False)
         return True
 
@@ -91,13 +96,16 @@ class NPM(FetchMethod):
             bb.utils.prunedir(destdir)
         else:
             bb.utils.mkdirhier(destdir)
-        runfetchcmd("cp -r " + os.path.join(ud.installdir,
-                                            "node_modules" + os.sep + ud.packagename) + " " + ud.destdir + os.sep, d)
-        if ( subdir == "" ) and ( os.path.exists(os.path.join(ud.installdir, "node_modules" + os.sep + ".bin")) ):
+        runfetchcmd("cp -r \"" + os.path.join(ud.installdir,
+                                              "node_modules" + os.sep + ud.packagename) + "\" \"" + ud.destdir + os.sep + "\"",
+                    d)
+        if (subdir == "") and (os.path.exists(os.path.join(ud.installdir, "node_modules" + os.sep + ".bin"))):
             runfetchcmd(
-                "cp -r " + os.path.join(ud.installdir, "node_modules" + os.sep + ".bin") + " " + ud.destdir + os.sep, d)
+                "cp -r \"" + os.path.join(ud.installdir,
+                                          "node_modules" + os.sep + ".bin") + "\" \"" + ud.destdir + os.sep + "\"", d)
         return True
 
     def clean(self, ud, d):
         """ clean the npm directory """
         bb.utils.remove(ud.localpath, True)
+
