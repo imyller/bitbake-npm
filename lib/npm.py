@@ -80,6 +80,8 @@ class NPM(FetchMethod):
         npm_version = subprocess.check_output([ud.npmcmd, "-v"], stderr=subprocess.STDOUT).strip()
         logger.debug(2, "npm version: " + npm_version)
         os.chdir(ud.installdir)
+        with open("package.json", 'w') as f:
+            f.write("{}\n")
         runfetchcmd(fetchcmd, d, quiet=False)
         return True
 
