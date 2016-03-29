@@ -1,7 +1,7 @@
 bitbake-npm
 ===========
 
-BitBake 1.26 (Yocto 1.8) layer adding fetch support for Node.js NPM repositories.
+BitBake 1.28 (Yocto 2.0) layer adding fetch support for Node.js NPM repositories.
 
 Adds support for `npm://<package name>;version=<package version>` in recipe `SRC_URI`.
 
@@ -36,7 +36,7 @@ Usage
 2. Use `npm://` URI sources in the recipe `SRC_URI`
 
   ```
-        SRC_URI = "npm://forever;version=0.11.1"
+        SRC_URI = "npm://forever;version=0.15.1"
   ```
 
   *Note:* defining a `version` is optional
